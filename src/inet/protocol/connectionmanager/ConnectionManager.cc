@@ -111,7 +111,7 @@ void ConnectionManager::handleMessage(cMessage *msg)
 void ConnectionManager::propagatePreChannelOff()
 {
     if (txSignal != nullptr) {
-        txTransmissionChannel->forceTransmissionFinishTime(simTime());
+//        txTransmissionChannel->forceTransmissionFinishTime(simTime());
         delete txSignal;
         txSignal = nullptr;
     }

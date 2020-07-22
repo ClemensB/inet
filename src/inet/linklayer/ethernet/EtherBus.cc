@@ -248,7 +248,7 @@ void EtherBus::handleMessage(cMessage *msg)
             auto signal2 = isLast ? signal : signal->dup();
 
             // stop current transmission
-            ogate->getTransmissionChannel()->forceTransmissionFinishTime(SIMTIME_ZERO);
+//            ogate->getTransmissionChannel()->forceTransmissionFinishTime(SIMTIME_ZERO);
             send(signal2, SendOptions().duration(duration), ogate);
         }
         else {
