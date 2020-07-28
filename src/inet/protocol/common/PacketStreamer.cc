@@ -61,12 +61,14 @@ void PacketStreamer::pushPacket(Packet *packet, cGate *gate)
     Enter_Method("pushPacket");
     ASSERT(!isStreaming());
     take(packet);
+    int origPacketId = packet->getId();
     streamedPacket = packet;
     streamDatarate = datarate;
     auto packetLength = packet->getTotalLength();
     EV_INFO << "Starting streaming packet " << packet->getName() << "." << std::endl;
     pushOrSendPacketStart(packet->dup(), outputGate, consumer, streamDatarate);
     EV_INFO << "Ending streaming packet " << packet->getName() << "." << std::endl;
+    streamedPacket->setOrigPacketId(origPacketId);
     pushOrSendPacketEnd(streamedPacket, outputGate, consumer, streamDatarate);
     streamedPacket = nullptr;
     numProcessedPackets++;
