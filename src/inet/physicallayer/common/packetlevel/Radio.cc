@@ -399,10 +399,25 @@ WirelessSignal *Radio::createSignal(Packet *packet) const
 {
     encapsulate(packet);
     if (sendRawBytes) {
+#if 0
+        Ptr<const BytesChunk> bytes;
+        Ptr<const BitsChunk> bits;
+        int64_t bitLength = packet->getDataLength().get();
+        if (bitLength >= 8)
+            bytes = peekDataAt<BytesChunk>(b(0), b(bitLength - (bitLength & 7)));
+        if (bitLength & 7)
+            bits = peekDataAt<BitsChunk>(b(bitLength - (bitLength & 7)), b(bitLength & 7));
+        packet->eraseAll();
+        if (bitLength >= 8)
+            packet->insertAtFront(bytes);
+        if (bitLength & 7)
+            packet->insertAtBack(bits);
+#else
         // TODO: this doesn't always work, because the packet length may not be divisible by 8
         auto bytes = packet->peekDataAsBytes();
         packet->eraseAll();
         packet->insertAtFront(bytes);
+#endif
     }
     WirelessSignal *signal = check_and_cast<WirelessSignal *>(medium->transmitPacket(this, packet));
     ASSERT(signal->getDuration() != 0);
