@@ -63,7 +63,7 @@ void StreamThroughTransmitter::endTx()
 void StreamThroughTransmitter::scheduleTxEndTimer(Signal *signal)
 {
     ASSERT(txStartTime != -1);
-    scheduleClockEvent(txStartTime + SIMTIME_AS_CLOCKTIME(signal->getDuration()), txEndTimer);
+    scheduleClockEventAt(txStartTime + SIMTIME_AS_CLOCKTIME(signal->getDuration()), txEndTimer);
 }
 
 void StreamThroughTransmitter::pushPacket(Packet *packet, cGate *gate)
@@ -107,7 +107,7 @@ b StreamThroughTransmitter::getPushPacketProcessedLength(Packet *packet, cGate *
 {
     if (txSignal == nullptr)
         return b(0);
-    simclocktime_t transmissionDuration = getClockTime() - txStartTime;
+    clocktime_t transmissionDuration = getClockTime() - txStartTime;
     return b(std::floor(datarate.get() * transmissionDuration.dbl()));
 }
 

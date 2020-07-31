@@ -94,7 +94,7 @@ void StreamingTransmitter::scheduleTxEndTimer(Signal *signal)
 {
     if (txEndTimer->isScheduled())
         cancelEvent(txEndTimer);
-    scheduleClockEvent(getClockTime() + SIMTIME_AS_CLOCKTIME(signal->getDuration()), txEndTimer);
+    scheduleClockEventAfter(SIMTIME_AS_CLOCKTIME(signal->getDuration()), txEndTimer);
 }
 
 void StreamingTransmitter::pushPacketProgress(Packet *packet, cGate *gate, bps datarate, b position, b extraProcessableLength)
