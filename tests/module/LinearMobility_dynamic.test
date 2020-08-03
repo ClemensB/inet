@@ -1,0 +1,63 @@
+%description:
+
+Test dynamic creation of a node with a LinearMobility model.
+
+This test checks whether the node behaves correctly, and does not behave
+as if it was created at simTime=0.
+
+The node is created at t=10s with a speed of 10mps and the simulation ends at t=20s.
+Thus, it should have moved 100 meters by then.
+
+%#--------------------------------------------------------------------------------------------------------------
+%file: network.ned
+
+import inet.common.scenario.ScenarioManager;
+
+network Scenario
+{
+	submodules:
+		scenarioManager: ScenarioManager;
+}
+
+%#--------------------------------------------------------------------------------------------------------------
+%file: node.ned
+import inet.node.base.NodeBase;
+
+module Node extends NodeBase
+{
+	@statistic[lastPositionX](source=xCoord(mobilityPos(mobility.mobilityStateChanged)); record=last);
+}
+
+%#--------------------------------------------------------------------------------------------------------------
+%file: scenario.xml
+<scenario>
+	<create-module t="10.0" type="Node" parent="Scenario" submodule="node" />
+</scenario>
+
+%inifile: omnetpp.ini
+[General]
+network = Scenario
+
+ned-path = .;../../../../src
+record-eventlog = true
+sim-time-limit = 20s
+
+*.scenarioManager.script = xmldoc("scenario.xml")
+
+**.mobility.constraintAreaMinX = -1000m
+**.mobility.constraintAreaMinY = -1000m
+**.mobility.constraintAreaMaxX = 1000m
+**.mobility.constraintAreaMaxY = 1000m
+**.mobility.constraintAreaMaxZ = 1000m
+**.mobility.initFromDisplayString = false
+
+*.node.mobility.typename = "LinearMobility"
+*.node.mobility.initialX = 0m
+*.node.mobility.initialY = 0m
+*.node.mobility.initialZ = 0m
+*.node.mobility.speed = 10mps
+*.node.mobility.initialMovementHeading = 0deg
+
+%#--------------------------------------------------------------------------------------------------------------
+%contains: results/General-#0.sca
+scalar Scenario.node lastPositionX:last 100
