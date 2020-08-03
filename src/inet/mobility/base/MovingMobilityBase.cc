@@ -48,13 +48,14 @@ void MovingMobilityBase::initialize(int stage)
         moveTimer = new cMessage("move");
         updateInterval = par("updateInterval");
         faceForward = par("faceForward");
+
+        lastUpdate = simTime();
     }
 }
 
 void MovingMobilityBase::initializePosition()
 {
     MobilityBase::initializePosition();
-    lastUpdate = simTime();
     scheduleUpdate();
 }
 
