@@ -60,7 +60,7 @@ void ThruputMeteringChannel::initialize()
 
 cChannel::Result ThruputMeteringChannel::processMessage(cMessage *msg, const SendOptions& options, simtime_t t)
 {
-    cChannel::Result result = cDatarateChannel::processMessage(msg, options, t);
+    auto result = cDatarateChannel::processMessage(msg, options, t);
 
     cPacket *pkt = dynamic_cast<cPacket *>(msg);
     // TODO handle disabled state (show with different style?/color? or print "disabled"?)
