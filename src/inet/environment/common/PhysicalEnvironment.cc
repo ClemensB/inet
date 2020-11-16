@@ -76,7 +76,7 @@ void PhysicalEnvironment::convertPoints(std::vector<Coord>& points)
 {
     auto originPosition = coordinateSystem == nullptr ? GeoCoord(deg(0), deg(0), m(0)) : coordinateSystem->computeGeographicCoordinate(Coord::ZERO);
     Box boundingBox = Box::computeBoundingBox(points);
-    Coord center = boundingBox.getCenter();
+    Coord center = boundingBox.getSize() / 2;
     for (auto & point : points) {
         point -= center;
         if (coordinateSystem != nullptr)
